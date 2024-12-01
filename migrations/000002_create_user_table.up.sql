@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS repo.user(
+username TEXT NOT NULL PRIMARY KEY,
+name TEXT  NOT NULL
+);

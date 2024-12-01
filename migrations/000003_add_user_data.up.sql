@@ -1,0 +1,1 @@
+DELETE FROM repo.user WHERE 1=1

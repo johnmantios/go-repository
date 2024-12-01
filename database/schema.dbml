@@ -1,0 +1,35 @@
+Table order {
+    order_id text [pk, not null]
+    pallet_id bigint [ref: > pallet.pallet_id]
+    delivery_date date [not null]
+    destination text [not null]
+    shipping_carrier text
+    distribution_center text [not null]
+    production_year int [not null]
+    production_week int [not null]
+    production_day text [not null]
+    country text [not null]
+    bag_size text [not null]
+    created_by text [not null]
+    created_at timestamp [not null]
+    modified_by text
+    modified_at timestamp
+    tracking_code string
+}
+
+
+
+Table pallet {
+    pallet_id bigint [pk, not null]
+    trailer_id text
+    status text [not null]
+    delivery_date date [not null]
+    destination text [not null]
+    distribution_center text [not null]
+    line text [not null]
+    created_by text [not null]
+    created_at timestamp [not null]
+    modified_by text
+    modified_at timestamp
+}
+
