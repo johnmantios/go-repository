@@ -7,11 +7,6 @@ import (
 )
 
 func serverErrorResponse(w http.ResponseWriter, r *http.Request, err error, logger *log.Logger) {
-	logger.Println(r, err)
-	logger.WithFields(log.Fields{
-		"request": r,
-	}).Error(err)
-
 	message := "the server encountered a problem and could not process your request"
 	errorResponse(w, r, http.StatusInternalServerError, message, logger)
 }
@@ -21,9 +16,7 @@ func errorResponse(w http.ResponseWriter, r *http.Request, status int, message a
 
 	err := WriteJSON(w, status, env, nil)
 	if err != nil {
-		logger.WithFields(log.Fields{
-			"request": r,
-		}).Error(err)
+		logger.Error(err)
 		w.WriteHeader(500)
 	}
 }

@@ -2,31 +2,34 @@ package main
 
 import (
 	_ "github.com/lib/pq"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"johnmantios.com/go-repository/pkg/api"
-	repository "johnmantios.com/go-repository/pkg/repo/postgres"
+	repository "johnmantios.com/go-repository/pkg/repo/redis"
 	"johnmantios.com/go-repository/pkg/service"
-	"os"
+	"log"
 )
 
 func main() {
-	log.SetReportCaller(true)
 
 	db, err := repository.OpenDB()
 	if err != nil {
 		log.Panic(err)
 	}
 
-	repo, err := repository.NewPostgresRepo(db)
+	repo, err := repository.NewRedisRepo(db)
 	if err != nil {
 		log.Panic(err)
 	}
 
 	svc := service.NewGreetingUserService(repo)
 
-	logger := &log.Logger{
-		Out: os.Stdout,
-	}
+	var logger = logrus.New()
+	logger.SetFormatter(&logrus.JSONFormatter{
+		// DisableTimestamp: false, // Default: false
+		// DisableSorting:   false, // sort the fields in the order of the keys
+		PrettyPrint:     true, // for debugging
+		TimestampFormat: "2006-01-02 15:04:05",
+	})
 
 	api := &api.GreetingUserAPI{
 		Svc:    svc,

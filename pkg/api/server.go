@@ -52,7 +52,7 @@ func (api *GreetingUserAPI) Serve() error {
 	api.Logger.WithFields(log.Fields{
 		"env":  api.Env,
 		"addr": srv.Addr,
-	}).Info()
+	}).Info("Starting server...")
 
 	err := srv.ListenAndServe()
 	if !errors.Is(err, http.ErrServerClosed) {
