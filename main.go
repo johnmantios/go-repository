@@ -5,6 +5,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"johnmantios.com/go-repository/pkg/api"
 	repository "johnmantios.com/go-repository/pkg/repo/redis"
+	//repository "johnmantios.com/go-repository/pkg/repo/postgres"
 	"johnmantios.com/go-repository/pkg/service"
 	"log"
 )
@@ -16,6 +17,7 @@ func main() {
 		log.Panic(err)
 	}
 
+	//repo, err := repository.NewPostgresRepo(db)
 	repo, err := repository.NewRedisRepo(db)
 	if err != nil {
 		log.Panic(err)
