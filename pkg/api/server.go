@@ -14,7 +14,7 @@ import (
 
 func (api *GreetingUserAPI) Serve() error {
 	srv := &http.Server{
-		Addr:         fmt.Sprintf(":%d", 4000),
+		Addr:         fmt.Sprintf(":%d", 80),
 		Handler:      api.Routes(),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,

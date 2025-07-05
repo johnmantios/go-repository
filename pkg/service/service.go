@@ -1,22 +1,26 @@
 package service
 
-import (
-	"johnmantios.com/go-repository/pkg/repo"
-)
-
-type GreetingUserService struct {
-	repository repo.IRepository
+type UserGetter interface {
+	GetAUser(string) (*User, error)
 }
 
-func NewGreetingUserService(repository repo.IRepository) GreetingUserService {
+type User struct {
+	Name string `json:"name"`
+}
+
+type GreetingUserService struct {
+	userGetter UserGetter
+}
+
+func NewGreetingUserService(userGetter UserGetter) GreetingUserService {
 	return GreetingUserService{
-		repository: repository,
+		userGetter: userGetter,
 	}
 }
 
-func (g *GreetingUserService) Greet(username string) (*repo.User, error) {
+func (g *GreetingUserService) Greet(username string) (*User, error) {
 
-	user, err := g.repository.GetAUser(username)
+	user, err := g.userGetter.GetAUser(username)
 	if err != nil {
 		return nil, err
 	}

@@ -5,13 +5,13 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/redis/go-redis/v9"
-	"johnmantios.com/go-repository/pkg/repo"
+	"johnmantios.com/go-repository/pkg/service"
 	"net/url"
 	"os"
 	"time"
 )
 
-type RedisRepo struct {
+type Repo struct {
 	Users UsersModel
 }
 
@@ -36,13 +36,13 @@ func OpenDB() (*redis.Client, error) {
 	return rdb, nil
 }
 
-func NewRedisRepo(db *redis.Client) (*RedisRepo, error) {
-	return &RedisRepo{
+func NewRedisRepo(db *redis.Client) (*Repo, error) {
+	return &Repo{
 		Users: UsersModel{DB: db},
 	}, nil
 }
 
-func (p RedisRepo) GetAUser(username string) (*repo.User, error) {
+func (p Repo) GetAUser(username string) (*service.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -51,14 +51,14 @@ func (p RedisRepo) GetAUser(username string) (*repo.User, error) {
 		panic(err)
 	}
 
-	user := &repo.User{Name: name}
+	user := &service.User{Name: name}
 
 	if err != nil {
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
-			return &repo.User{}, ErrRecordNotFound
+			return &service.User{}, ErrRecordNotFound
 		default:
-			return &repo.User{}, err
+			return &service.User{}, err
 		}
 	}
 

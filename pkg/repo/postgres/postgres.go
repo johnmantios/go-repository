@@ -5,13 +5,13 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"johnmantios.com/go-repository/pkg/repo"
+	"johnmantios.com/go-repository/pkg/service"
 	"net/url"
 	"os"
 	"time"
 )
 
-type PostgresRepo struct {
+type Repo struct {
 	Users UsersModel
 }
 
@@ -87,13 +87,13 @@ func OpenDB() (*sql.DB, error) {
 	return db, nil
 }
 
-func NewPostgresRepo(db *sql.DB) (*PostgresRepo, error) {
-	return &PostgresRepo{
+func NewPostgresRepo(db *sql.DB) (*Repo, error) {
+	return &Repo{
 		Users: UsersModel{DB: db},
 	}, nil
 }
 
-func (p PostgresRepo) GetAUser(username string) (*repo.User, error) {
+func (p Repo) GetAUser(username string) (*service.User, error) {
 	query := `
 		SELECT 
 			name
@@ -102,7 +102,7 @@ func (p PostgresRepo) GetAUser(username string) (*repo.User, error) {
 		WHERE username = $1;
 		`
 
-	var user repo.User
+	var user service.User
 
 	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Second)
 	defer cancel()
